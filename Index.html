@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Flores Amarillas 🌻</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    min-height: 100vh;
+    overflow-x: hidden;
+    background: radial-gradient(circle at 50% 0%, #ffe9a8 0%, #ffd166 35%, #f7a600 100%);
+    font-family: 'Segoe UI', system-ui, sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    padding: 30px 0;
+  }
+
+  /* ===== RAMO ===== */
+  .bouquet {
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+    position: relative;
+    z-index: 5;
+    height: 240px;
+  }
+
+  .flower {
+    position: relative;
+    width: 90px;
+    height: 220px;
+    transform-origin: bottom center;
+    animation: sway 4s ease-in-out infinite;
+    margin: 0 -12px;
+  }
+  .flower:nth-child(1) { animation-delay: 0s;   rotate: -8deg; }
+  .flower:nth-child(2) { animation-delay: .6s;  rotate: -3deg; scale: 1.08; z-index: 2; }
+  .flower:nth-child(3) { animation-delay: 1.2s; rotate: 3deg;  scale: 1.08; z-index: 2; }
+  .flower:nth-child(4) { animation-delay: 1.8s; rotate: 8deg; }
+
+  @keyframes sway {
+    0%, 100% { rotate: -4deg; }
+    50%      { rotate:  4deg; }
+  }
+
+  /* Tallo */
+  .stem {
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    width: 6px;
+    height: 140px;
+    background: linear-gradient(to right, #2e7d32, #4caf50, #2e7d32);
+    border-radius: 4px;
+    transform: translateX(-50%);
+  }
+
+  /* Hojas */
+  .leaf {
+    position: absolute;
+    width: 34px;
+    height: 18px;
+    background: #43a047;
+    border-radius: 0 100% 0 100%;
+  }
+  .leaf.left  { bottom: 55px; left: 50%; transform: translateX(-100%) rotate(-20deg); }
+  .leaf.right { bottom: 85px; left: 50%; transform: rotate(20deg); }
+
+  /* Cabeza del girasol */
+  .head {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    width: 90px;
+    height: 90px;
+    transform: translateX(-50%);
+    animation: spin 40s linear infinite;
+    z-index: 3;
+  }
+
+  @keyframes spin {
+    to { rotate: 360deg; }
+  }
+
+  /* Pétalos */
+  .petal {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 16px;
+    height: 42px;
+    margin-left: -8px;
+    margin-top: -46px;
+    background: linear-gradient(to bottom, #ffe14d, #ffb703);
+    border-radius: 50% 50% 50% 50% / 70% 70% 30% 30%;
+    transform-origin: center bottom;
+    box-shadow: inset 0 -3px 6px rgba(0,0,0,.12);
+  }
+
+  /* Centro */
+  .center {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 42px;
+    height: 42px;
+    background: radial-gradient(circle at 35% 35%, #6b4423, #3d2314);
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    box-shadow: 0 0 12px rgba(0,0,0,.35) inset;
+    z-index: 2;
+  }
+
+  /* ===== MENSAJE ===== */
+  .message {
+    margin-top: 10px;
+    text-align: center;
+    color: #5a3a00;
+    z-index: 10;
+    padding: 0 20px;
+  }
+  .message h1 {
+    font-size: clamp(1.6rem, 5vw, 2.4rem);
+    opacity: 0;
+    animation: fadeUp 1.2s ease forwards;
+    animation-delay: .6s;
+  }
+  .message p {
+    margin-top: 10px;
+    font-size: clamp(.9rem, 2.5vw, 1.1rem);
+    opacity: 0;
+    animation: fadeUp 1.2s ease forwards;
+    animation-delay: 1.2s;
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(18px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ===== CARTA OCULTA ===== */
+  .card {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,.55);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    opacity: 0;
+    pointer-events: none;
+    transition: .4s;
+    z-index: 100;
+  }
+  .card.show {
+    opacity: 1;
+    pointer-events: auto;
+  }
+  .card-inner {
+    background: #fffdf5;
+    max-width: 420px;
+    width: 100%;
+    border-radius: 20px;
+    padding: 35px 28px;
+    text-align: center;
+    box-shadow: 0 20px 60px rgba(0,0,0,.35);
+    transform: scale(.85);
+    transition: .4s cubic-bezier(.34,1.56,.64,1);
+    position: relative;
+  }
+  .card.show .card-inner { transform: scale(1); }
+  .card-inner h2 {
+    color: #d18b00;
+    margin-bottom: 15px;
+    font-size: 1.5rem;
+  }
+  .card-inner p {
+    color: #5a3a00;
+    line-height: 1.7;
+    font-size: 1rem;
+  }
+  .card-inner .firma {
+    margin-top: 20px;
+    font-style: italic;
+    color: #b07400;
+  }
+  .close {
+    position: absolute;
+    top: 12px;
+    right: 16px;
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    color: #d18b00;
+    cursor: pointer;
+  }
+
+  /* ===== PÉTALOS CAYENDO ===== */
+  .falling {
+    position: fixed;
+    top: -40px;
+    font-size: 22px;
+    pointer-events: none;
+    z-index: 1;
+    animation: fall linear forwards;
+  }
+
+  @keyframes fall {
+    to {
+      transform: translateY(105vh) rotate(720deg);
+      opacity: 0;
+    }
+  }
+
+  /* Botones */
+  .btns {
+    margin-top: 22px;
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    justify-content: center;
+    z-index: 10;
+  }
+  .btn {
+    padding: 12px 26px;
+    border: none;
+    border-radius: 50px;
+    background: #fff;
+    color: #d18b00;
+    font-weight: 700;
+    font-size: .95rem;
+    cursor: pointer;
+    box-shadow: 0 6px 18px rgba(0,0,0,.15);
+    transition: .25s;
+  }
+  .btn:hover { transform: translateY(-3px) scale(1.05); box-shadow: 0 10px 25px rgba(0,0,0,.25); }
+  .btn:active { transform: scale(.97); }
+  .btn.primary { background: #d18b00; color: #fff; }
+</style>
+</head>
+<body>
+
+  <div class="bouquet" id="bouquet"></div>
+
+  <div class="message">
+    <h1>🌻 Feliz 21 de Septiembre, Amor 🌻</h1>
+    <p>Unas flores amarillas virtuales, hechas con código y cariño.</p>
+
+    <div class="btns">
+      <button class="btn" onclick="shower()">Lluvia de pétalos ✨</button>
+      <button class="btn primary" onclick="openCard()">Ábreme 💌</button>
+    </div>
+  </div>
+
+  <!-- Carta oculta -->
+  <div class="card" id="card" onclick="closeCard(event)">
+    <div class="card-inner" onclick="event.stopPropagation()">
+      <button class="close" onclick="closeCard()">✕</button>
+      <h2>Para ti, Amor 💛</h2>
+      <p>
+        Ando trabajando, pero me tomé un momento
+        para hacerte estas flores con código.<br><br>
+        Cada pétalo va con un pensamiento tuyo,
+        y cada línea de esto con las ganas que tengo de verte.<br><br>
+        Gracias por ser mi persona favorita. 🌻
+      </p>
+      <p class="firma">— Con cariño, Leonardo ✨</p>
+    </div>
+  </div>
+
+<script>
+  /* ===== GENERAR FLORES ===== */
+  const bouquet = document.getElementById('bouquet');
+
+  function createFlower(petalCount = 14) {
+    const flower = document.createElement('div');
+    flower.className = 'flower';
+
+    flower.innerHTML = `
+      <div class="head">
+        <div class="center"></div>
+      </div>
+      <div class="stem"></div>
+      <div class="leaf left"></div>
+      <div class="leaf right"></div>
+    `;
+
+    const head = flower.querySelector('.head');
+
+    // Pétalos en círculo
+    for (let i = 0; i < petalCount; i++) {
+      const angle = (360 / petalCount) * i;
+      const petal = document.createElement('div');
+      petal.className = 'petal';
+      petal.style.transform = `rotate(${angle}deg) translateY(-30px)`;
+      head.appendChild(petal);
+    }
+
+    return flower;
+  }
+
+  // 4 girasoles
+  for (let i = 0; i < 4; i++) {
+    bouquet.appendChild(createFlower(14 + i * 2));
+  }
+
+  /* ===== LLUVIA DE PÉTALOS ===== */
+  const emojis = ['🌻', '💛', '✨', '🌼', '💫'];
+
+  function shower(amount = 45) {
+    for (let i = 0; i < amount; i++) {
+      setTimeout(() => {
+        const petal = document.createElement('div');
+        petal.className = 'falling';
+        petal.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+        petal.style.left = Math.random() * 100 + 'vw';
+        petal.style.fontSize = (16 + Math.random() * 20) + 'px';
+        petal.style.animationDuration = (3 + Math.random() * 3) + 's';
+        document.body.appendChild(petal);
+        setTimeout(() => petal.remove(), 6500);
+      }, i * 80);
+    }
+  }
+
+  /* ===== CARTA ===== */
+  function openCard()  { document.getElementById('card').classList.add('show'); }
+  function closeCard(e) {
+    if (!e || e.target.id === 'card' || e.target.classList.contains('close')) {
+      document.getElementById('card').classList.remove('show');
+    }
+  }
+
+  window.addEventListener('load', () => shower(20));
+</script>
+</body>
+</html>
